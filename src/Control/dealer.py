@@ -1,16 +1,16 @@
-from src.controller.player import Player
+from Control.player import Player
 
 
 class Dealer(Player):
-    def __init__(self, cards):
-        Player.__init__(self, cards)
-        self.hand[0].turn()
+    def __init__(self, cards, balance):
+        Player.__init__(self, cards, balance)
         self.show_one_card = True
+        self.hand[0].turn()
 
     def hit(self, deck):
         """Dealers strategy is to only hit if it has less than 17
         And the rule requires the dealer to draw at least 16"""
-        while self.hand.get_score() < 17:
+        while self.get_score() < 17:
             c = deck.deal()
             c.turn()
             self.hand.append(c)
@@ -21,7 +21,10 @@ class Dealer(Player):
 
     def __str__(self):
         """Return just one card if not hit yet."""
-        if self.showOneCard:
+        if self.show_one_card:
             return str(self.hand[0])
         else:
             return Player.__str__(self)
+
+    def new_hand(self, cards):
+        self.__init__(cards, self.balance)
